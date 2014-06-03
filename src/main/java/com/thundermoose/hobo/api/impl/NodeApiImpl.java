@@ -20,10 +20,6 @@ public class NodeApiImpl implements NodeApi {
   @Autowired
   NodeRepository repo;
 
-  public NodeApiImpl(){
-    System.out.println("ionit");
-  }
-
   @Override
   public Node getNode(@PathVariable String id) {
     return repo.findById(id);

@@ -5,6 +5,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public class Node {
   private String hostname;
   private int port;
   @OneToMany(fetch = FetchType.EAGER)
-  private List<Container> containers;
+  private List<Container> containers = new ArrayList<>();
 
   public String getId() {
     return id;
