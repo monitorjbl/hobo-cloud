@@ -1,0 +1,49 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'jetty'
+
+sourceCompatibility = 1.8
+version = "1.0-SNAPSHOT"
+
+springVersion = '4.0.5.RELEASE'
+springDataVersion = '1.6.0.RELEASE'
+hibernateVersion = '4.3.5.Final'
+jacksonVersion = '2.3.2'
+slf4jVersion = '1.7.7'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //Spring
+    compile "org.springframework:spring-core:${springVersion}"
+    compile "org.springframework:spring-beans:${springVersion}"
+    compile "org.springframework:spring-orm:${springVersion}"
+    compile "org.springframework:spring-tx:${springVersion}"
+    compile "org.springframework:spring-web:${springVersion}"
+    compile "org.springframework:spring-webmvc:${springVersion}"
+    compile "javassist:javassist:3.12.1.GA"
+    //Spring JPA
+    compile "org.springframework.data:spring-data-jpa:${springDataVersion}"
+    compile "org.hibernate:hibernate-entitymanager:${hibernateVersion}"
+    //Marshallers
+    compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    //Utils
+    compile "com.google.guava:guava:17.0"
+    //Internal DB
+    compile "com.h2database:h2:1.3.175"
+    //Docker API
+    compile "com.kpelykh:docker-java:0.8.1"
+    //Logging
+    compile "org.slf4j:slf4j-api:${slf4jVersion}"
+    compile "org.slf4j:slf4j-log4j12:${slf4jVersion}"
+    runtime "log4j:log4j:1.2.17"
+
+    testCompile "junit:junit:4.11"
+}
+
+war {
+    from 'src/main/webapp' // adds a file-set to the root of the archive
+}
