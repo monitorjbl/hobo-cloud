@@ -22,7 +22,8 @@ public class NodeApiImpl implements NodeApi {
 
   @Override
   public Node getNode(@PathVariable String id) {
-    return repo.findById(id);
+    Node n = repo.findById(id);
+    return n;
   }
 
   @Override

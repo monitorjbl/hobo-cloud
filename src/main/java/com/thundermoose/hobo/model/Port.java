@@ -1,13 +1,17 @@
 package com.thundermoose.hobo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  * Created by Thundermoose on 6/3/2014.
  */
 @Entity
+@JsonIgnoreProperties({"container"})
 public class Port {
   @Id
   @GeneratedValue
@@ -15,14 +19,17 @@ public class Port {
   private String scheme;
   private String containerPort;
   private String hostPort;
+  @ManyToOne
+  private Container container;
 
   public Port() {
   }
 
-  public Port(String scheme, String containerPort, String hostPort) {
+  public Port(String scheme, String containerPort, String hostPort, Container container) {
     this.scheme = scheme;
     this.containerPort = containerPort;
     this.hostPort = hostPort;
+    this.container = container;
   }
 
   public String getId() {
@@ -57,13 +64,12 @@ public class Port {
     this.hostPort = hostPort;
   }
 
-  @Override
-  public String toString() {
-    return "Port{" +
-            "id='" + id + '\'' +
-            ", scheme='" + scheme + '\'' +
-            ", containerPort='" + containerPort + '\'' +
-            ", hostPort='" + hostPort + '\'' +
-            '}';
+  public Container getContainer() {
+    return container;
   }
+
+  public void setContainer(Container container) {
+    this.container = container;
+  }
+
 }

@@ -18,7 +18,7 @@ public class PropertiesConfig {
   public static final String CONFIG_OPTION = "conf";
 
   @Bean
-  public PropertyPlaceholderConfigurer properties() {
+  public static PropertyPlaceholderConfigurer properties() {
     PropertyPlaceholderConfigurer props = new PropertyPlaceholderConfigurer();
     props.setNullValue("@null");
     List<Resource> files = new ArrayList<>();

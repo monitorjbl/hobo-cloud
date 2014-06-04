@@ -1,5 +1,6 @@
 package com.thundermoose.hobo.config;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.context.annotation.Bean;
@@ -61,6 +62,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   public ObjectMapper objectMapper() {
     ObjectMapper o = new ObjectMapper();
     o.enable(SerializationFeature.INDENT_OUTPUT);
+    o.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     return o;
   }
 }

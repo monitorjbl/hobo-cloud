@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Set;
+
 /**
  * Created by Thundermoose on 6/2/2014.
  */
@@ -20,13 +22,13 @@ public interface ContainerApi {
 
   @RequestMapping(value = "/container/all", method = RequestMethod.GET)
   @ResponseBody
-  public Container getAllContainers();
+  public Set<Container> getAllContainers();
 
-  @RequestMapping(value = "/container}", method = RequestMethod.PUT)
+  @RequestMapping(value = "/container", method = RequestMethod.PUT)
   @ResponseBody
-  public Container putNode(@RequestBody Container container);
+  public Container putContainer(@RequestBody Container container);
 
   @RequestMapping(value = "/container/{id}", method = RequestMethod.DELETE)
   @ResponseBody
-  public void deleteNode(@PathVariable String id);
+  public void deleteContainer(@PathVariable String id);
 }

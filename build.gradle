@@ -5,11 +5,12 @@ apply plugin: 'jetty'
 sourceCompatibility = 1.8
 version = "1.0-SNAPSHOT"
 
-springVersion = '4.0.5.RELEASE'
-springDataVersion = '1.6.0.RELEASE'
-hibernateVersion = '4.3.5.Final'
-jacksonVersion = '2.3.2'
-slf4jVersion = '1.7.7'
+//properties
+ext.springVersion = '4.0.5.RELEASE'
+ext.springDataVersion = '1.6.0.RELEASE'
+ext.hibernateVersion = '4.3.5.Final'
+ext.jacksonVersion = '2.3.2'
+ext.slf4jVersion = '1.7.7'
 
 repositories {
     mavenCentral()
@@ -24,7 +25,7 @@ dependencies {
     compile "org.springframework:spring-tx:${springVersion}"
     compile "org.springframework:spring-web:${springVersion}"
     compile "org.springframework:spring-webmvc:${springVersion}"
-    compile "javassist:javassist:3.12.1.GA"
+    compile "org.javassist:javassist:3.18.1-GA"
     //Spring JPA
     compile "org.springframework.data:spring-data-jpa:${springDataVersion}"
     compile "org.hibernate:hibernate-entitymanager:${hibernateVersion}"

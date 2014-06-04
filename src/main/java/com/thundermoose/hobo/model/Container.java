@@ -1,37 +1,44 @@
 package com.thundermoose.hobo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Thundermoose on 6/2/2014.
  */
 @Entity
+@JsonIgnoreProperties({"node"})
 public class Container {
   @Id
   @GeneratedValue
   private String id;
+  private String dockerId;
   private String repository;
   private String tag;
   private String[] command;
   private String build;
-  @OneToMany(fetch = FetchType.EAGER)
-  private List<Port> ports = new ArrayList<>();
-  @Transient
+  private int memory;
+  private double cpu;
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "container")
+  private Set<Port> ports = new HashSet<>();
+  @ManyToOne
   private Node node;
 
   public Container() {
   }
 
-  public Container(String id, String repository, String tag) {
-    this.id = id;
+  public Container(String dockerId, String repository, String tag) {
+    this.dockerId = dockerId;
     this.repository = repository;
     this.tag = tag;
   }
@@ -42,6 +49,14 @@ public class Container {
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  public String getDockerId() {
+    return dockerId;
+  }
+
+  public void setDockerId(String dockerId) {
+    this.dockerId = dockerId;
   }
 
   public String getRepository() {
@@ -76,11 +91,27 @@ public class Container {
     this.build = build;
   }
 
-  public List<Port> getPorts() {
+  public int getMemory() {
+    return memory;
+  }
+
+  public void setMemory(int memory) {
+    this.memory = memory;
+  }
+
+  public double getCpu() {
+    return cpu;
+  }
+
+  public void setCpu(double cpu) {
+    this.cpu = cpu;
+  }
+
+  public Set<Port> getPorts() {
     return ports;
   }
 
-  public void setPorts(List<Port> ports) {
+  public void setPorts(Set<Port> ports) {
     this.ports = ports;
   }
 
@@ -90,18 +121,5 @@ public class Container {
 
   public void setNode(Node node) {
     this.node = node;
-  }
-
-  @Override
-  public String toString() {
-    return "Container{" +
-            "id='" + id + '\'' +
-            ", repository='" + repository + '\'' +
-            ", tag='" + tag + '\'' +
-            ", command=" + Arrays.toString(command) +
-            ", ports=" + ports +
-            ", node=" + node +
-            ", build='" + build + '\'' +
-            '}';
   }
 }

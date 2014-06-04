@@ -28,8 +28,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Thundermoose on 6/2/2014.
@@ -51,7 +53,6 @@ public class DockerApiImpl implements DockerApi {
         return false;
       });
       if (container.getBuild() != null) {
-        //TODO: Implement builder
         File dir = Files.createTempDir();
         File f = new File(dir.getAbsolutePath() + "/Dockerfile");
         try (FileOutputStream fos = new FileOutputStream(f)) {
@@ -73,19 +74,15 @@ public class DockerApiImpl implements DockerApi {
       config.setImage(container.getRepository() + ":" + container.getTag());
       config.setCmd(container.getCommand());
       ContainerCreateResponse response = client.createContainer(config);
-      container.setId(response.getId());
+      container.setDockerId(response.getId());
 
       HostConfig hc = new HostConfig();
       hc.setPublishAllPorts(true);
-      client.startContainer(container.getId(), hc);
+      client.startContainer(container.getDockerId(), hc);
 
-      ContainerInspectResponse c = client.inspectContainer(container.getId());
-      Map<String, Ports.Port> ports = c.getNetworkSettings().ports.getAllPorts();
-      for (String key : ports.keySet()) {
-        Ports.Port p = ports.get(key);
-        container.getPorts().add(new Port(p.getScheme(), p.getPort(), p.getHostPort()));
-      }
+      getPorts(client, container);
 
+      container.setNode(node);
       return container;
     } catch (DockerException | IOException e) {
       throw new RuntimeException(e);
@@ -102,20 +99,36 @@ public class DockerApiImpl implements DockerApi {
   }
 
   @Override
-  public List<Container> getRunningContainers(Node node) {
+  public Set<Container> getRunningContainers(Node node) {
     DockerClient client = client(node);
-    List<Container> containers = new ArrayList<>();
-    for (com.kpelykh.docker.client.model.Container c : client.listContainers(true)) {
-      containers.add(new Container(c.getId(), c.getNames()[0].split(":")[0], c.getNames()[0].split(":")[1]));
+    Set<Container> containers = new HashSet<>();
+    try {
+      for (com.kpelykh.docker.client.model.Container c : client.listContainers(false)) {
+        String[] split = c.getImage().split(":");
+        Container cnt = new Container(c.getId(), split[0], split[1]);
+        getPorts(client, cnt);
+        containers.add(cnt);
+      }
+      return containers;
+    } catch (DockerException e) {
+      throw new RuntimeException(e);
     }
-    return containers;
+  }
+
+  void getPorts(DockerClient client, Container container) throws DockerException {
+    ContainerInspectResponse c = client.inspectContainer(container.getDockerId());
+    Map<String, Ports.Port> ports = c.getNetworkSettings().ports.getAllPorts();
+    for (String key : ports.keySet()) {
+      Ports.Port p = ports.get(key);
+      container.getPorts().add(new Port(p.getScheme(), p.getPort(), p.getHostPort(), container));
+    }
   }
 
   DockerClient client(Node node) {
     DockerClient dockerClient = null;
     try {
       dockerClient = new DockerClient("http://" + node.getHostname() + ":" + node.getPort());
-    } catch (Exception e) {
+    } catch (DockerException e) {
       throw new RuntimeException(e);
     }
     return dockerClient;

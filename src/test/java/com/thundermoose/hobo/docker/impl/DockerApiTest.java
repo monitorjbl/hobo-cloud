@@ -30,9 +30,7 @@ public class DockerApiTest {
     c = sut.startContainer(n, c);
     System.out.println(c);
 
-    Thread.sleep(5000);
-
-    sut.stopContainer(n, c);
-
+//    Thread.sleep(5000);
+//    sut.stopContainer(n, c);
   }
 }

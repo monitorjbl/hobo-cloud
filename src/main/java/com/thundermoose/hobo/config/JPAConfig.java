@@ -37,7 +37,7 @@ public class JPAConfig {
   @Bean
   public DataSource dataSource() {
     JdbcDataSource ds = new JdbcDataSource();
-    ds.setURL(jdbc);
+    ds.setURL(jdbc.replaceAll("\\$\\{tmp.dir\\}","butts"));
     ds.setUser(user);
     ds.setPassword(pass);
     return ds;

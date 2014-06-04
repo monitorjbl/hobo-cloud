@@ -1,12 +1,13 @@
 package com.thundermoose.hobo.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Thundermoose on 6/2/2014.
@@ -18,8 +19,10 @@ public class Node {
   private String id;
   private String hostname;
   private int port;
-  @OneToMany(fetch = FetchType.EAGER)
-  private List<Container> containers = new ArrayList<>();
+  private int maxMemory;
+  private double maxCpu;
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "node")
+  private Set<Container> containers = new HashSet<>();
 
   public String getId() {
     return id;
@@ -45,11 +48,28 @@ public class Node {
     this.port = port;
   }
 
-  public List<Container> getContainers() {
+  public int getMaxMemory() {
+    return maxMemory;
+  }
+
+  public void setMaxMemory(int maxMemory) {
+    this.maxMemory = maxMemory;
+  }
+
+  public double getMaxCpu() {
+    return maxCpu;
+  }
+
+  public void setMaxCpu(double maxCpu) {
+    this.maxCpu = maxCpu;
+  }
+
+  public Set<Container> getContainers() {
     return containers;
   }
 
-  public void setContainers(List<Container> containers) {
+  public void setContainers(Set<Container> containers) {
     this.containers = containers;
   }
+
 }
