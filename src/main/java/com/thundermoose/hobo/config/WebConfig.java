@@ -3,6 +3,7 @@ package com.thundermoose.hobo.config;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +20,10 @@ import org.springframework.web.servlet.config.annotation.ContentNegotiationConfi
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Thundermoose on 6/2/2014.
@@ -28,6 +32,9 @@ import java.util.List;
 @ComponentScan(basePackages = {"com.thundermoose.hobo"})
 @EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter {
+
+  @Value("${docker.trace}")
+  boolean dockerTrace;
 
   @Override
   public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -64,5 +71,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     o.enable(SerializationFeature.INDENT_OUTPUT);
     o.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     return o;
+  }
+
+  @PostConstruct
+  public void setJavaLogging() {
+    if (dockerTrace) {
+      Logger.getLogger("com.sun.jersey.api.client.filter.LoggingFilter").setLevel(Level.FINEST);
+    } else {
+      Logger.getLogger("com.sun.jersey.api.client.filter.LoggingFilter").setLevel(Level.OFF);
+    }
   }
 }

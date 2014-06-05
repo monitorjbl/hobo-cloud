@@ -3,7 +3,7 @@ package com.thundermoose.hobo.api.impl;
 import com.thundermoose.hobo.api.NodeApi;
 import com.thundermoose.hobo.exceptions.NotFoundException;
 import com.thundermoose.hobo.model.Node;
-import com.thundermoose.hobo.repositories.NodeRepository;
+import com.thundermoose.hobo.persistence.NodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;

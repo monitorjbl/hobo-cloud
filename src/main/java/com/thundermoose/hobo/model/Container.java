@@ -3,13 +3,18 @@ package com.thundermoose.hobo.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,13 +27,19 @@ public class Container {
   @Id
   @GeneratedValue
   private String id;
+  @Column(unique = true)
   private String dockerId;
+  private Date created;
   private String repository;
   private String tag;
   private String[] command;
   private String build;
-  private int memory;
-  private double cpu;
+  @Min(524288)
+  private Long memory;
+  @Min(1)
+  private Integer cpu;
+  private Long expiry;
+  private Boolean external;
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "container")
   private Set<Port> ports = new HashSet<>();
   @ManyToOne
@@ -57,6 +68,14 @@ public class Container {
 
   public void setDockerId(String dockerId) {
     this.dockerId = dockerId;
+  }
+
+  public Date getCreated() {
+    return created;
+  }
+
+  public void setCreated(Date created) {
+    this.created = created;
   }
 
   public String getRepository() {
@@ -91,20 +110,36 @@ public class Container {
     this.build = build;
   }
 
-  public int getMemory() {
+  public Long getMemory() {
     return memory;
   }
 
-  public void setMemory(int memory) {
+  public void setMemory(Long memory) {
     this.memory = memory;
   }
 
-  public double getCpu() {
+  public Integer getCpu() {
     return cpu;
   }
 
-  public void setCpu(double cpu) {
+  public void setCpu(Integer cpu) {
     this.cpu = cpu;
+  }
+
+  public Long getExpiry() {
+    return expiry;
+  }
+
+  public void setExpiry(Long expiry) {
+    this.expiry = expiry;
+  }
+
+  public Boolean getExternal() {
+    return external;
+  }
+
+  public void setExternal(Boolean external) {
+    this.external = external;
   }
 
   public Set<Port> getPorts() {

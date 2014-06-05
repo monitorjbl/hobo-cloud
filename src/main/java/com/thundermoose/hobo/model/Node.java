@@ -1,11 +1,15 @@
 package com.thundermoose.hobo.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,10 +21,13 @@ public class Node {
   @Id
   @GeneratedValue
   private String id;
+  @Column(unique = true)
+  @NotEmpty
   private String hostname;
-  private int port;
-  private int maxMemory;
-  private double maxCpu;
+  private Date created;
+  private Integer port;
+  private Integer maxMemory;
+  private Double maxCpu;
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "node")
   private Set<Container> containers = new HashSet<>();
 
@@ -40,27 +47,35 @@ public class Node {
     this.hostname = hostname;
   }
 
-  public int getPort() {
+  public Date getCreated() {
+    return created;
+  }
+
+  public void setCreated(Date created) {
+    this.created = created;
+  }
+
+  public Integer getPort() {
     return port;
   }
 
-  public void setPort(int port) {
+  public void setPort(Integer port) {
     this.port = port;
   }
 
-  public int getMaxMemory() {
+  public Integer getMaxMemory() {
     return maxMemory;
   }
 
-  public void setMaxMemory(int maxMemory) {
+  public void setMaxMemory(Integer maxMemory) {
     this.maxMemory = maxMemory;
   }
 
-  public double getMaxCpu() {
+  public Double getMaxCpu() {
     return maxCpu;
   }
 
-  public void setMaxCpu(double maxCpu) {
+  public void setMaxCpu(Double maxCpu) {
     this.maxCpu = maxCpu;
   }
 
@@ -71,5 +86,4 @@ public class Node {
   public void setContainers(Set<Container> containers) {
     this.containers = containers;
   }
-
 }

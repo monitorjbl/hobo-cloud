@@ -1,9 +1,8 @@
 package com.thundermoose.hobo.scheduler.impl;
 
-import com.thundermoose.hobo.api.NodeApi;
 import com.thundermoose.hobo.model.Container;
 import com.thundermoose.hobo.model.Node;
-import com.thundermoose.hobo.repositories.NodeRepository;
+import com.thundermoose.hobo.persistence.NodeRepository;
 import com.thundermoose.hobo.scheduler.NodeScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,7 +34,7 @@ public class NodeSchedulerImpl implements NodeScheduler {
   double weight(Node n) {
     double weight = 0;
     for (Container c : n.getContainers()) {
-      weight += (c.getMemory() / n.getMaxMemory()) + (c.getCpu() / n.getMaxCpu());
+      weight += (c.getMemory() / n.getMaxMemory()) * 0.5 + (c.getCpu() / n.getMaxCpu()) * 0.5;
     }
     return weight;
   }

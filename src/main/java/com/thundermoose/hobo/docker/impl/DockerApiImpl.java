@@ -22,6 +22,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -38,7 +39,7 @@ import java.util.Set;
  */
 @Component
 public class DockerApiImpl implements DockerApi {
-  Logger log = LoggerFactory.getLogger(DockerApiImpl.class);
+  private static final Logger log = LoggerFactory.getLogger(DockerApiImpl.class);
 
   @Override
   public Container startContainer(Node node, Container container) {
@@ -73,6 +74,8 @@ public class DockerApiImpl implements DockerApi {
       ContainerConfig config = new ContainerConfig();
       config.setImage(container.getRepository() + ":" + container.getTag());
       config.setCmd(container.getCommand());
+      config.setMemoryLimit(container.getMemory());
+      config.setCpuShares(container.getCpu());
       ContainerCreateResponse response = client.createContainer(config);
       container.setDockerId(response.getId());
 
@@ -80,7 +83,9 @@ public class DockerApiImpl implements DockerApi {
       hc.setPublishAllPorts(true);
       client.startContainer(container.getDockerId(), hc);
 
-      getPorts(client, container);
+      //get port mappings
+      ContainerInspectResponse inspect = client.inspectContainer(container.getDockerId());
+      getPorts(inspect.getNetworkSettings().ports.getAllPorts(), container);
 
       container.setNode(node);
       return container;
@@ -104,9 +109,15 @@ public class DockerApiImpl implements DockerApi {
     Set<Container> containers = new HashSet<>();
     try {
       for (com.kpelykh.docker.client.model.Container c : client.listContainers(false)) {
+        ContainerInspectResponse inspect = client.inspectContainer(c.getId());
         String[] split = c.getImage().split(":");
+
         Container cnt = new Container(c.getId(), split[0], split[1]);
-        getPorts(client, cnt);
+        cnt.setCpu(inspect.getConfig().getCpuShares());
+        cnt.setMemory(inspect.getConfig().getMemoryLimit());
+
+
+        getPorts(inspect.getNetworkSettings().ports.getAllPorts(), cnt);
         containers.add(cnt);
       }
       return containers;
@@ -115,9 +126,7 @@ public class DockerApiImpl implements DockerApi {
     }
   }
 
-  void getPorts(DockerClient client, Container container) throws DockerException {
-    ContainerInspectResponse c = client.inspectContainer(container.getDockerId());
-    Map<String, Ports.Port> ports = c.getNetworkSettings().ports.getAllPorts();
+  void getPorts(Map<String, Ports.Port> ports, Container container) throws DockerException {
     for (String key : ports.keySet()) {
       Ports.Port p = ports.get(key);
       container.getPorts().add(new Port(p.getScheme(), p.getPort(), p.getHostPort(), container));

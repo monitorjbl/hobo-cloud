@@ -3,7 +3,7 @@ package com.thundermoose.hobo.exceptions;
 /**
  * Created by Thundermoose on 6/2/2014.
  */
-public class NotFoundException extends RuntimeException {
+public class NotFoundException extends BaseException {
   public NotFoundException() {
     super();
   }

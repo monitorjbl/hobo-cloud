@@ -22,7 +22,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @Import(PropertiesConfig.class)
-@EnableJpaRepositories(basePackages = {"com.thundermoose.hobo.repositories"})
+@EnableJpaRepositories(basePackages = {"com.thundermoose.hobo.persistence"})
 @EnableTransactionManagement
 public class JPAConfig {
   @Value("${db.jdbc}")
@@ -37,7 +37,7 @@ public class JPAConfig {
   @Bean
   public DataSource dataSource() {
     JdbcDataSource ds = new JdbcDataSource();
-    ds.setURL(jdbc.replaceAll("\\$\\{tmp.dir\\}","butts"));
+    ds.setURL(jdbc);
     ds.setUser(user);
     ds.setPassword(pass);
     return ds;

@@ -72,4 +72,25 @@ public class Port {
     this.container = container;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Port port = (Port) o;
+
+    if (containerPort != null ? !containerPort.equals(port.containerPort) : port.containerPort != null) return false;
+    if (hostPort != null ? !hostPort.equals(port.hostPort) : port.hostPort != null) return false;
+    if (scheme != null ? !scheme.equals(port.scheme) : port.scheme != null) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = scheme != null ? scheme.hashCode() : 0;
+    result = 31 * result + (containerPort != null ? containerPort.hashCode() : 0);
+    result = 31 * result + (hostPort != null ? hostPort.hashCode() : 0);
+    return result;
+  }
 }

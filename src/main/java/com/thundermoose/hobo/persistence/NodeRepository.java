@@ -1,4 +1,4 @@
-package com.thundermoose.hobo.repositories;
+package com.thundermoose.hobo.persistence;
 
 import com.thundermoose.hobo.model.Node;
 import org.springframework.data.repository.CrudRepository;

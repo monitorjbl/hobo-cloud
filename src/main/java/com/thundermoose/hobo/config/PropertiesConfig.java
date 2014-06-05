@@ -9,6 +9,8 @@ import org.springframework.core.io.Resource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Thundermoose on 6/2/2014.
@@ -29,4 +31,5 @@ public class PropertiesConfig {
     props.setLocations(files.toArray(new Resource[files.size()]));
     return props;
   }
+
 }
