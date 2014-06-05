@@ -39,10 +39,10 @@ public class Container {
   @Min(1)
   private Integer cpu;
   private Long expiry;
-  private Boolean external;
+  private Boolean external = false;
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "container")
   private Set<Port> ports = new HashSet<>();
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.ALL)
   private Node node;
 
   public Container() {

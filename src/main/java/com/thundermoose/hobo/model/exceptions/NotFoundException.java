@@ -1,4 +1,4 @@
-package com.thundermoose.hobo.exceptions;
+package com.thundermoose.hobo.model.exceptions;
 
 /**
  * Created by Thundermoose on 6/2/2014.

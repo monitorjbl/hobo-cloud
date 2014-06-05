@@ -1,7 +1,8 @@
 package com.thundermoose.hobo.api.impl;
 
 import com.thundermoose.hobo.api.NodeApi;
-import com.thundermoose.hobo.exceptions.NotFoundException;
+import com.thundermoose.hobo.model.ModelValidator;
+import com.thundermoose.hobo.model.exceptions.NotFoundException;
 import com.thundermoose.hobo.model.Node;
 import com.thundermoose.hobo.persistence.NodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,7 @@ public class NodeApiImpl implements NodeApi {
 
   @Override
   public Node getNode(@PathVariable String id) {
-    Node n = repo.findById(id);
-    return n;
+    return repo.findById(id);
   }
 
   @Override

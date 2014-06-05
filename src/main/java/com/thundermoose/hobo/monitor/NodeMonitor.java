@@ -1,6 +1,7 @@
 package com.thundermoose.hobo.monitor;
 
 import com.google.common.collect.Iterables;
+import com.thundermoose.hobo.api.ContainerApi;
 import com.thundermoose.hobo.docker.DockerApi;
 import com.thundermoose.hobo.model.Container;
 import com.thundermoose.hobo.model.Node;
@@ -36,13 +37,15 @@ public class NodeMonitor implements Runnable {
   @Autowired
   ContainerRepository containerRepo;
   @Autowired
-  DockerApi api;
+  ContainerApi containerApi;
+  @Autowired
+  DockerApi dockerApi;
 
   @Override
   public void run() {
     try {
-      pollNodes();
-      cleanupNodes();
+      //pollNodes();
+      //cleanupNodes();
     } catch (Exception e) {
       log.error("Job threw exception", e);
     }
@@ -52,7 +55,7 @@ public class NodeMonitor implements Runnable {
     log.info("Polling all nodes");
     for (Node node : nodeRepo.findAll()) {
       Set<Container> updated = new HashSet<>();
-      for (Container c : api.getRunningContainers(node)) {
+      for (Container c : dockerApi.getRunningContainers(node)) {
         Container match = Iterables.find(node.getContainers(), input -> c.getDockerId().equals(input.getDockerId()), c);
         if (match.getId() != null) {
           for (Port p : match.getPorts()) {
@@ -84,13 +87,13 @@ public class NodeMonitor implements Runnable {
       long diff = milliSinceDate(c.getCreated());
       if (diff > c.getExpiry()) {
         log.info("Container [" + c.getDockerId() + "] on Node [" + c.getNode().getHostname() + "] is overdue for deletion by " + diff + "ms");
-        containerRepo.delete(c);
+        containerApi.deleteContainer(c.getId());
       }
     }
   }
 
   long milliSinceDate(Date date) {
     Duration d = Duration.between(Instant.ofEpochMilli(date.getTime()), Instant.now());
-    return d.getNano() / 1000000;
+    return d.toMillis();
   }
 }

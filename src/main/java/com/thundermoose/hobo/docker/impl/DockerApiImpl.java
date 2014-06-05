@@ -13,24 +13,20 @@ import com.kpelykh.docker.client.model.Image;
 import com.kpelykh.docker.client.model.Ports;
 import com.sun.jersey.api.client.ClientResponse;
 import com.thundermoose.hobo.docker.DockerApi;
-import com.thundermoose.hobo.exceptions.NotFoundException;
+import com.thundermoose.hobo.model.exceptions.NotFoundException;
 import com.thundermoose.hobo.model.Container;
 import com.thundermoose.hobo.model.Node;
 import com.thundermoose.hobo.model.Port;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -97,7 +93,8 @@ public class DockerApiImpl implements DockerApi {
   @Override
   public void stopContainer(Node node, Container container) {
     try {
-      client(node).stopContainer(container.getId());
+      client(node).stopContainer(container.getDockerId());
+      client(node).removeContainer(container.getDockerId());
     } catch (DockerException e) {
       throw new RuntimeException(e);
     }

@@ -1,7 +1,6 @@
 package com.thundermoose.hobo.model;
 
-import com.thundermoose.hobo.exceptions.ValidationException;
-import com.thundermoose.hobo.model.Container;
+import com.thundermoose.hobo.model.exceptions.ValidationException;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintViolation;
@@ -24,14 +23,11 @@ public class ModelValidator {
     validator = factory.getValidator();
   }
 
-  public <E> void validate(E obj) {
-    Set<ConstraintViolation<E>> errors = validator.validate(obj);
+  public void validate(Object obj) {
+    Set<ConstraintViolation<Object>> errors = validator.validate(obj);
     if (errors.size() > 0) {
-      Set<ValidationError> ve = new HashSet<>();
-      for (ConstraintViolation<E> e : errors) {
-        ve.add(new ValidationError(e.getPropertyPath().toString(), e.getMessage()));
-      }
-      throw new ValidationException(ve);
+      throw new ValidationException(errors);
     }
   }
+
 }

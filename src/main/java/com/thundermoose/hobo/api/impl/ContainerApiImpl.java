@@ -2,7 +2,7 @@ package com.thundermoose.hobo.api.impl;
 
 import com.thundermoose.hobo.api.ContainerApi;
 import com.thundermoose.hobo.docker.DockerApi;
-import com.thundermoose.hobo.exceptions.NotFoundException;
+import com.thundermoose.hobo.model.exceptions.NotFoundException;
 import com.thundermoose.hobo.model.Container;
 import com.thundermoose.hobo.model.Node;
 import com.thundermoose.hobo.persistence.ContainerRepository;
@@ -11,9 +11,11 @@ import com.thundermoose.hobo.scheduler.NodeScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,12 +36,12 @@ public class ContainerApiImpl implements ContainerApi {
   @Autowired
   ContainerRepository repo;
   @Autowired
-  DockerApi docker;
+  DockerApi dockerApi;
   @Autowired
   ModelValidator validator;
 
   @Override
-  public Container getContainer(@PathVariable String id) {
+  public Container getContainer(@PathVariable("id") String id) {
     return repo.findById(id);
   }
 
@@ -58,21 +60,23 @@ public class ContainerApiImpl implements ContainerApi {
     container.setCpu(container.getCpu() == null ? defaultCpu : container.getCpu());
     container.setMemory(container.getMemory() == null ? defaultMemory : container.getMemory());
     container.setExpiry(container.getExpiry() == null ? defaultExpiry : container.getExpiry());
+    container.setCreated(new Date());
 
     validator.validate(container);
 
     Node node = scheduler.leastLoadedNode();
-    Container c = docker.startContainer(node, container);
+    Container c = dockerApi.startContainer(node, container);
     repo.save(c);
     return c;
   }
 
   @Override
   public void deleteContainer(@PathVariable String id) {
-    Container c = repo.findById(id);
+    Container c = repo.findOne(id);
     if (c == null) {
       throw new NotFoundException("Container [" + id + "] not found");
     }
     repo.delete(c);
+    dockerApi.stopContainer(c.getNode(), c);
   }
 }

@@ -10,5 +10,5 @@ import java.util.Set;
  */
 public interface ContainerRepository extends CrudRepository<Container, String> {
   public Container findById(String id);
-  public Set<Container> findByExternal(boolean external);
+  public Set<Container> findByExternal(Boolean external);
 }

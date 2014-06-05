@@ -1,4 +1,4 @@
-package com.thundermoose.hobo.exceptions;
+package com.thundermoose.hobo.model.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

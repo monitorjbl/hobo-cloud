@@ -2,6 +2,7 @@ package com.thundermoose.hobo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,7 +20,7 @@ public class Port {
   private String scheme;
   private String containerPort;
   private String hostPort;
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.ALL)
   private Container container;
 
   public Port() {
