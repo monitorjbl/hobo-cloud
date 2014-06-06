@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 /**
  * Created by Thundermoose on 6/4/2014.
  */
-@JsonIgnoreProperties({"stackTrace", "suppressed"})
+@JsonIgnoreProperties({"stackTrace", "suppressed", "localizedMessage"})
 public abstract class BaseException extends RuntimeException {
   private String type = this.getClass().getName();
 

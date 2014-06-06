@@ -13,6 +13,7 @@ import com.kpelykh.docker.client.model.Image;
 import com.kpelykh.docker.client.model.Ports;
 import com.sun.jersey.api.client.ClientResponse;
 import com.thundermoose.hobo.docker.DockerApi;
+import com.thundermoose.hobo.model.exceptions.DockerApiException;
 import com.thundermoose.hobo.model.exceptions.NotFoundException;
 import com.thundermoose.hobo.model.Container;
 import com.thundermoose.hobo.model.Node;
@@ -57,9 +58,9 @@ public class DockerApiImpl implements DockerApi {
           ClientResponse response = client.build(dir, container.getRepository());
 
           //have to wait for inputstream to read out
-          log.info(IOUtils.toString(response.getEntityInputStream()));
+          log.debug(IOUtils.toString(response.getEntityInputStream()));
         } catch (IOException e) {
-          throw new RuntimeException(e);
+          throw new DockerApiException(e);
         } finally {
           FileUtils.deleteDirectory(dir);
         }
@@ -86,17 +87,24 @@ public class DockerApiImpl implements DockerApi {
       container.setNode(node);
       return container;
     } catch (DockerException | IOException e) {
-      throw new RuntimeException(e);
+      throw new DockerApiException(e);
     }
   }
 
   @Override
   public void stopContainer(Node node, Container container) {
     try {
-      client(node).stopContainer(container.getDockerId());
-      client(node).removeContainer(container.getDockerId());
+      DockerClient client = client(node);
+      client.stopContainer(container.getDockerId());
+      client.removeContainer(container.getDockerId());
+      try {
+        client.inspectContainer(container.getDockerId());
+        throw new DockerApiException("Could not delete container [" + container.getDockerId() + "] from server");
+      } catch (com.kpelykh.docker.client.NotFoundException e) {
+        //do nothing, this exception means the container was deleted
+      }
     } catch (DockerException e) {
-      throw new RuntimeException(e);
+      throw new DockerApiException(e);
     }
   }
 
@@ -119,7 +127,7 @@ public class DockerApiImpl implements DockerApi {
       }
       return containers;
     } catch (DockerException e) {
-      throw new RuntimeException(e);
+      throw new DockerApiException(e);
     }
   }
 
@@ -135,7 +143,7 @@ public class DockerApiImpl implements DockerApi {
     try {
       dockerClient = new DockerClient("http://" + node.getHostname() + ":" + node.getPort());
     } catch (DockerException e) {
-      throw new RuntimeException(e);
+      throw new DockerApiException(e);
     }
     return dockerClient;
   }
