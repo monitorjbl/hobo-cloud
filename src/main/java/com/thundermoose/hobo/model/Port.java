@@ -20,7 +20,7 @@ public class Port {
   private String scheme;
   private String containerPort;
   private String hostPort;
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.REMOVE)
   private Container container;
 
   public Port() {

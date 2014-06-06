@@ -9,6 +9,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Min;
@@ -22,6 +26,10 @@ import java.util.Set;
  * Created by Thundermoose on 6/2/2014.
  */
 @Entity
+@NamedEntityGraphs(@NamedEntityGraph(
+        name = "Container.full",
+        attributeNodes = @NamedAttributeNode(value = "ports")
+))
 @JsonIgnoreProperties({"node"})
 public class Container {
   @Id
@@ -40,9 +48,9 @@ public class Container {
   private Integer cpu;
   private Long expiry;
   private Boolean external = false;
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "container")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "container", orphanRemoval = true)
   private Set<Port> ports = new HashSet<>();
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.DETACH)
   private Node node;
 
   public Container() {

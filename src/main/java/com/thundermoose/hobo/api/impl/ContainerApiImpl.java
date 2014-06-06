@@ -11,12 +11,10 @@ import com.thundermoose.hobo.scheduler.NodeScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -42,16 +40,16 @@ public class ContainerApiImpl implements ContainerApi {
 
   @Override
   public Container getContainer(@PathVariable("id") String id) {
-    return repo.findById(id);
+    Container c = repo.findById(id);
+    if (c == null) {
+      throw new NotFoundException("Container [" + id + "] not found");
+    }
+    return c;
   }
 
   @Override
   public Set<Container> getAllContainers() {
-    Set<Container> containers = new HashSet<>();
-    for (Container c : repo.findAll()) {
-      containers.add(c);
-    }
-    return containers;
+    return repo.getAllContainers();
   }
 
   @Override

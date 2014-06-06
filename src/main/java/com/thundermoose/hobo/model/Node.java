@@ -8,6 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import java.util.Date;
 import java.util.HashSet;
@@ -17,6 +21,16 @@ import java.util.Set;
  * Created by Thundermoose on 6/2/2014.
  */
 @Entity
+@NamedEntityGraphs(@NamedEntityGraph(
+        name = "Node.full",
+        attributeNodes = @NamedAttributeNode(value="containers", subgraph = "ports"),
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "ports",
+                        attributeNodes = {@NamedAttributeNode("ports")}
+                )
+        }
+))
 public class Node {
   @Id
   @GeneratedValue
@@ -28,7 +42,7 @@ public class Node {
   private Integer port;
   private Integer maxMemory;
   private Double maxCpu;
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "node")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "node", orphanRemoval = true)
   private Set<Container> containers = new HashSet<>();
 
   public String getId() {

@@ -19,7 +19,7 @@ public interface NodeApi {
 
   @RequestMapping(value = "/node/{id}", method = RequestMethod.GET)
   @ResponseBody
-  public Node getNode(@PathVariable String id);
+  public Node getNode(@PathVariable("id") String id);
 
   @RequestMapping(value = "/node/all", method = RequestMethod.GET)
   @ResponseBody
@@ -33,5 +33,5 @@ public interface NodeApi {
   @RequestMapping(value = "/node/{id}", method = RequestMethod.DELETE)
   @ResponseBody
   @Transactional
-  public void deleteNode(@PathVariable String id);
+  public void deleteNode(@PathVariable("id") String id);
 }
