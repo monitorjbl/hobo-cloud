@@ -1,4 +1,4 @@
-var app = angular.module('hobo', ['ngRoute']).config(function ($routeProvider) {
+var app = angular.module('hobo', ['ngRoute', 'ui.bootstrap']).config(function ($routeProvider) {
   $routeProvider.when('/', {
     templateUrl: 'root.html'
   }).when('/node', {
@@ -10,15 +10,48 @@ var app = angular.module('hobo', ['ngRoute']).config(function ($routeProvider) {
   });
 });
 
-app.controller('NodeCtrl', function ($scope, $http) {
-  var getAll = function () {
+app.controller('HoboCtrl', function ($scope, $http, $location, $route, $modal) {
+  $scope.getAllNodes = function () {
     $http.get('api/node/all').success(function (data) {
       $scope.nodes = data;
     });
-  }
-  getAll();
+  };
+
+  $scope.deleteContainer = function (id) {
+    $http.delete('api/container/' + id).success(function (data) {
+      $route.reload();
+    });
+  };
+
+  $scope.openContainerModal = function () {
+    var modalInstance = $modal.open({
+      templateUrl: 'container-modal.html',
+      controller: 'ContainerModal',
+      size: 'sm'
+    });
+  };
+
 });
 
-app.controller('ContainerCtrl', function ($scope, $http) {
-
+app.controller('NodeModal', function ($scope, $modalInstance, $http, $route) {
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel')
+  };
 });
+
+app.controller('ContainerModal', function ($scope, $modalInstance, $http, $route) {
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel')
+  };
+  $scope.ok = function (container) {
+    $http({
+      url: 'api/container',
+      method:'PUT',
+      data: container
+    }).success(function (data) {
+      $route.reload();
+    });
+  };
+});
+
+

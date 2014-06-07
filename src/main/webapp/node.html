@@ -4,7 +4,7 @@
   </div>
 </div>
 
-<div class="row" ng-controller="NodeCtrl">
+<div class="row" ng-controller="HoboCtrl" ng-init="getAllNodes()">
   <div class="col-lg-4" ng-repeat="node in nodes">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -13,13 +13,16 @@
           {{node.containers.length}}
         </div>
       </div>
-      <table class="table">
+      <table class="table table-striped">
         <tbody>
         <tr ng-repeat="container in node.containers">
-          <td>{{container.repository}}</td>
+          <td>
+            <button class="btn btn-danger"><i class="fa fa-minus" ng-click="deleteContainer(container.id)"></i></button>
+            {{container.repository}}
+          </td>
           <td>{{container.tag}}</td>
           <td>
-            <table>
+            <table class="port-table">
               <tr ng-repeat="port in container.ports">
                 <td>{{port.containerPort}} -> {{port.hostPort}}</td>
               </tr>

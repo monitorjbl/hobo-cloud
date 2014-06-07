@@ -1,3 +1,19 @@
+/* Custom Styles */
+
+.item-delete{
+  color: #ee4b41;
+}
+
+.container-table > tbody > tr:nth-child(even){
+  background-color:#A3CEAA;
+}
+.container-table > tbody > tr:nth-child(odd){
+  background-color: #06ab29;
+}
+.port-table tr{
+  background-color: transparent;
+}
+
 /* Global Styles */
 
 /* ------------------------------- */
