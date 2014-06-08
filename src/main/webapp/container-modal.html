@@ -1,36 +1,43 @@
 <div class="modal-header">
   <h3 class="modal-title">Create Container</h3>
 </div>
-<div class="modal-body">
-  <form class="form-horizontal" role="form" novalidate>
-    <div class="form-group">
+<form name="containerForm" class="form-horizontal" role="form" novalidate>
+  <div class="modal-body">
+    <div class="form-group" ng-class="{'has-error' : containerForm.repository.$invalid && !containerForm.repository.$pristine}">
       <div class="col-sm-12">
-        <input type="text" class="form-control" ng-model="container.repository" placeholder="Repository">
+        <input type="text" class="form-control" name="repository" ng-model="container.repository" placeholder="Repository" required>
+        <span class="help-block" ng-show="containerForm.repository.$error.required && !containerForm.repository.$pristine">Required</span>
       </div>
     </div>
     <div class="form-group">
       <div class="col-sm-12">
-        <input type="text" class="form-control" ng-model="container.tag" placeholder="Tag">
+        <input type="text" class="form-control" name="tag" ng-model="container.tag" placeholder="Tag">
       </div>
     </div>
     <div class="form-group">
       <div class="col-sm-12">
-        <input type="number" class="form-control" ng-model="container.memory" placeholder="Memory">
+        <input type="number" class="form-control" name="memory" ng-model="container.memory" placeholder="Memory">
       </div>
     </div>
     <div class="form-group">
       <div class="col-sm-12">
-        <input type="number" class="form-control" ng-model="container.cpu" placeholder="CPU Shares">
+        <input type="number" class="form-control" name="cpu" ng-model="container.cpu" placeholder="CPU Shares">
       </div>
     </div>
     <div class="form-group">
       <div class="col-sm-12">
-        <textarea class="form-control" rows="3" ng-model="container.build" placeholder="Dockerfile"></textarea>
+        <textarea class="form-control" rows="3" name="build" ng-model="container.build" placeholder="Dockerfile"></textarea>
       </div>
     </div>
-  </form>
-</div>
-<div class="modal-footer">
-  <button class="btn btn-primary" ng-click="ok(container)">OK</button>
-  <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-</div>
+    <div class="form-group has-error">
+      <div class="col-sm-12">
+        <span class="help-block" ng-show="error">{{error.message}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary" ng-disabled="containerForm.$invalid" ng-click="submit(container)">OK
+    </button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+  </div>
+</form>

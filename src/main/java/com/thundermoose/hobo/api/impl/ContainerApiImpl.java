@@ -63,6 +63,10 @@ public class ContainerApiImpl implements ContainerApi {
     validator.validate(container);
 
     Node node = scheduler.leastLoadedNode();
+    if(node == null){
+      throw new NotFoundException("No nodes were available to accept this request.");
+    }
+
     Container c = dockerApi.startContainer(node, container);
     repo.save(c);
     return c;

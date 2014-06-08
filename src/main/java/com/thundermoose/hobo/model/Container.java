@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
@@ -41,6 +42,7 @@ public class Container {
   private String repository;
   private String tag;
   private String[] command;
+  @Lob
   private String build;
   @Min(524288)
   private Long memory;

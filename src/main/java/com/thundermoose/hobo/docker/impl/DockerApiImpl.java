@@ -59,6 +59,9 @@ public class DockerApiImpl implements DockerApi {
 
           //have to wait for inputstream to read out
           log.debug(IOUtils.toString(response.getEntityInputStream()));
+
+          //set this to latest to make sure the most recent version is instantiated
+          container.setTag("latest");
         } catch (IOException e) {
           throw new DockerApiException(e);
         } finally {
