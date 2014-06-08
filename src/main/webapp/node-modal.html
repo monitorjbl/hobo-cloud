@@ -9,9 +9,10 @@
         <span class="help-block" ng-show="nodeForm.hostname.$error.required && !nodeForm.hostname.$pristine">Required</span>
       </div>
     </div>
-    <div class="form-group">
+    <div class="form-group" ng-class="{'has-error' : nodeForm.port.$invalid && !nodeForm.port.$pristine}">
       <div class="col-sm-12">
-        <input type="text" class="form-control" name="port" ng-model="node.port" placeholder="Port">
+        <input type="number" class="form-control" name="port" ng-model="node.port" placeholder="Port" required>
+        <span class="help-block" ng-show="nodeForm.port.$error.required && !nodeForm.port.$pristine">Required</span>
       </div>
     </div>
     <div class="form-group">
@@ -31,8 +32,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary" ng-disabled="containerForm.$invalid" ng-click="submit(node)">OK
-    </button>
+    <button type="submit" class="btn btn-primary" ng-disabled="nodeForm.$invalid" ng-click="submit(node)">OK</button>
     <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
   </div>
 </form>

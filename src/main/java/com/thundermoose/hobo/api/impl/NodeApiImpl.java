@@ -6,6 +6,7 @@ import com.thundermoose.hobo.model.Node;
 import com.thundermoose.hobo.persistence.NodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,10 @@ import java.util.Set;
 public class NodeApiImpl implements NodeApi {
   @Autowired
   NodeRepository repo;
+  @Value("${node.default.maxMemory}")
+  long defaultMemory;
+  @Value("${node.default.maxCpu}")
+  int defaultCpu;
 
   @Override
   public Node getNode(@PathVariable("id") String id) {
@@ -36,6 +41,8 @@ public class NodeApiImpl implements NodeApi {
 
   @Override
   public Node putNode(@RequestBody Node node) {
+    node.setMaxCpu(node.getMaxCpu() == null ? defaultCpu : node.getMaxCpu());
+    node.setMaxMemory(node.getMaxMemory() == null ? defaultMemory : node.getMaxMemory());
     return repo.save(node);
   }
 

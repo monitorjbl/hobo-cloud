@@ -40,8 +40,8 @@ public class Node {
   private String hostname;
   private Date created;
   private Integer port;
-  private Integer maxMemory;
-  private Double maxCpu;
+  private Long maxMemory;
+  private Integer maxCpu;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "node", orphanRemoval = true)
   private Set<Container> containers = new HashSet<>();
 
@@ -77,19 +77,19 @@ public class Node {
     this.port = port;
   }
 
-  public Integer getMaxMemory() {
+  public Long getMaxMemory() {
     return maxMemory;
   }
 
-  public void setMaxMemory(Integer maxMemory) {
+  public void setMaxMemory(Long maxMemory) {
     this.maxMemory = maxMemory;
   }
 
-  public Double getMaxCpu() {
+  public Integer getMaxCpu() {
     return maxCpu;
   }
 
-  public void setMaxCpu(Double maxCpu) {
+  public void setMaxCpu(Integer maxCpu) {
     this.maxCpu = maxCpu;
   }
 

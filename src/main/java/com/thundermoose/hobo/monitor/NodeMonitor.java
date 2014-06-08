@@ -44,8 +44,8 @@ public class NodeMonitor implements Runnable {
   @Override
   public void run() {
     try {
-      //pollNodes();
-      //cleanupNodes();
+      pollNodes();
+      cleanupNodes();
     } catch (Exception e) {
       log.error("Job threw exception", e);
     }
@@ -53,7 +53,7 @@ public class NodeMonitor implements Runnable {
 
   void pollNodes() {
     log.info("Polling all nodes");
-    for (Node node : nodeRepo.findAll()) {
+    for (Node node : nodeRepo.getAllNodes()) {
       Set<Container> updated = new HashSet<>();
       for (Container c : dockerApi.getRunningContainers(node)) {
         Container match = Iterables.find(node.getContainers(), input -> c.getDockerId().equals(input.getDockerId()), c);
