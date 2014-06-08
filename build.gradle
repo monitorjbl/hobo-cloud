@@ -7,6 +7,8 @@ version = "1.0-SNAPSHOT"
 
 //properties
 ext {
+    jettyPort = '8080'
+
     springVersion = '4.0.5.RELEASE'
     springDataVersion = '1.6.0.RELEASE'
     hibernateVersion = '4.3.5.Final'
@@ -45,9 +47,17 @@ dependencies {
     compile "org.slf4j:slf4j-api:${slf4jVersion}"
     compile "org.slf4j:slf4j-log4j12:${slf4jVersion}"
 
+    //Jetty embedded
+    compile 'org.eclipse.jetty:jetty-webapp:9.2.0.v20140526'
+
     testCompile "junit:junit:4.11"
 }
 
+jettyRun{
+    contextPath = '/'
+    httpPort = 8000
+}
+
 war {
-    from 'src/main/webapp' // adds a file-set to the root of the archive
+    from 'src/main/webapp'
 }
