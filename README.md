@@ -95,7 +95,7 @@ Once you've got at least one node in the system, you can start a container. A Do
 
 **Web UI**
 
-Go to http://localhost:8000/#/container and click the green '+' button. A popup will appear with fields for you to fill in. Remember that while the Dockerfile section is optional, the repository and tag you refer to must be visible to the nodes if you leave it blank. 
+Go to `http://localhost:8000/#/container` and click the green '+' button. A popup will appear with fields for you to fill in. Remember that while the Dockerfile section is optional, the repository and tag you refer to must be visible to the nodes if you leave it blank. 
 
 **REST**
 
@@ -143,3 +143,8 @@ curl -XPUT -H "Content-Type: application/json" -d '{
   "expiry":"'$EXPIRY'"
 }' http://$HOBO_CONTROLLER:8080/api/node
 ```
+
+# Configuring
+
+The configuration options and their default values can be reviewed [here](src/main/resources/defaults.conf). To override these, simply pass in your own config file as a JVM arg.
+
