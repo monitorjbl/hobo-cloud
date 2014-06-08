@@ -1,6 +1,8 @@
 # Hobo Cloud
 
-Uses Docker to build simple, temporary shelters for your wandering code to execute. Very useful if you've got some compute resources laying around and some work to do that doesn't require external access. Compiling code, running batch jobs, the kind of thing you need to run somwhere, but where doesn't actually matter.
+Uses Docker to build simple, temporary shelters for your wandering code to execute. Very useful if you've got some compute resources laying around and some work to do that doesn't require external access. Compiling code, running batch jobs, the kind of thing you need to run somewhere, but where doesn't actually matter.
+
+Hobo Cloud is built using Java, Hibernate, and the [Docker Java client](https://github.com/kpelykh/docker-java). The application is designed with a RESTful interface that allows you to easily interact with it from any platform.
 
 # How to Run
 
@@ -10,7 +12,7 @@ You'll need Git installed on your computer. Once you've got it, run this command
 
 `git clone https://github.com/monitorjbl/hobo-cloud.git`
 
-## Starting up controller
+## Start hobo controller
 
 There are two ways to do this. Pick the one that is right for you.
 
@@ -55,15 +57,15 @@ service docker.io restart
 
 ### Add node to Hobo Cloud
 
-Once you've got Docker running on the node, you need to add it to the Hobo Cloud. You can do this in two ways: from the web UI or from the node itself.
+Once you've got Docker running on the node, you need to add it to the Hobo Cloud. You can do this in two ways: with the web UI or with the REST interface.
 
 **Web UI**
 
 Once you've started the hobo controller, you can add nodes by going to `http://localhost:8000/#/node` and clicking the lovely green '+' button.
 
-**Node**
+**REST**
 
-Run this script on the node (remember to change the variable values to suit this node):
+Run this script anywhere that has cURL installed (the node itself probably will):
 
 ```
 # Hobo controller hostname or IP address
@@ -93,4 +95,47 @@ curl -XPUT -H "Content-Type: application/json" -d '{
 
 Once you've got at least one node in the system, you can start a container. A Docker container can  be defined from a Dockerfile and then referenced by name later on. Since your container can be running anywhere, you'll probably want to define it this way. However, if you configure your Docker nodes to use a personal repository (or if you have a container in the public repo), you can simply refer to the containers repo/tag identifier.
 
-### 
+**Web UI**
+Go to http://localhost:8000/#/container and click the green '+' button. A popup will appear with fields for you to fill in. Remember that while the Dockerfile section is optional, the repository and tag you refer to must be visible to the nodes if you leave it blank. 
+
+**REST**
+Run this script anywhere that has cURL installed:
+
+```
+# Hobo controller hostname or IP address
+HOBO_CONTROLLER=192.168.1.87
+
+# Required. Container to start up.
+REPOSITORY=mycontainer
+
+# Required. Tag in this repository to use.
+TAG=latest
+
+# Optional. Dockerfile to use to build a container.
+BUILD='
+FROM     ubuntu
+
+RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
+RUN apt-get update
+
+RUN apt-get install -y openssh-server
+RUN mkdir /var/run/sshd
+RUN echo 'root:screencast' | chpasswd
+
+EXPOSE 22
+CMD    /usr/sbin/sshd -D'
+
+# Optional: Maximum memory to devote to hobo containers (in bytes). Defaults to 256m.
+MEM=536870912
+
+# Optional: Maximum CPU shares to devote to hobo containers. Defaults to 1.
+CPU=1
+
+curl -XPUT -H "Content-Type: application/json" -d '{
+  "repository":"'$REPOSITORY'",
+  "tag":"'$TAG'",
+  "build":"'$BUILD'",
+  "memory":"'$MEM'",
+  "cpu":"'$CPU'"
+}' http://$HOBO_CONTROLLER:8080/api/node
+```
