@@ -1,6 +1,6 @@
 # Hobo Cloud
 
-Uses Docker to build simple, temporary shelters for your wandering code to execute.
+Uses Docker to build simple, temporary shelters for your wandering code to execute. Very useful if you've got some compute resources laying around and some work to do that doesn't require external access. Compiling code, running batch jobs, the kind of thing you need to run somwhere, but where doesn't actually matter.
 
 # How to Run
 
@@ -55,7 +55,15 @@ service docker.io restart
 
 ### Add node to Hobo Cloud
 
-Once you've got Docker running on the node, you need to add it to the Hobo Cloud. You can do this by running this script on the node (remember to change the variable values to suit this node):
+Once you've got Docker running on the node, you need to add it to the Hobo Cloud. You can do this in two ways: from the web UI or from the node itself.
+
+**Web UI**
+
+Once you've started the hobo controller, you can add nodes by going to `http://localhost:8000/#/node` and clicking the lovely green '+' button.
+
+**Node**
+
+Run this script on the node (remember to change the variable values to suit this node):
 
 ```
 # Hobo controller hostname or IP address
@@ -83,4 +91,6 @@ curl -XPUT -H "Content-Type: application/json" -d '{
 
 ## Start a container
 
-Once you've got at least one node in the system, you can start a container.
+Once you've got at least one node in the system, you can start a container. A Docker container can  be defined from a Dockerfile and then referenced by name later on. Since your container can be running anywhere, you'll probably want to define it this way. However, if you configure your Docker nodes to use a personal repository (or if you have a container in the public repo), you can simply refer to the containers repo/tag identifier.
+
+### 
