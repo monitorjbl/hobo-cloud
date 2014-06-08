@@ -36,6 +36,8 @@ Once you've done so, the WAR will be available in the `build/libs` directory. By
 
 ## Add a node
 
+### Install Docker
+
 To make your hobo cloud, you need some machines capable of running Docker. It doesn't matter what kind of machines these are; they can be desktops, laptops, bladdes, or even VMs as long as they run Docker. You will need to have these machines run the Docker remote API on a port visible to the Hobo Cloud.
 
 Here's an example script that will install and configure Docker on Ubuntu 14.04:
@@ -50,6 +52,8 @@ sed -i 's/#DOCKER_OPTS="-dns 8.8.8.8 -dns 8.8.4.4"/DOCKER_OPTS="-H=tcp:\/\/0.0.0
 # Restart docker
 service docker.io restart
 ```
+
+### Add node to Hobo Cloud
 
 Once you've got Docker running on the node, you need to add it to the Hobo Cloud. You can do this by running this script on the node (remember to change the variable values to suit this node):
 
@@ -77,3 +81,6 @@ curl -XPUT -H "Content-Type: application/json" -d '{
 }' http://$HOBO_CONTROLLER:8080/api/node
 ```
 
+## Start a container
+
+Once you've got at least one node in the system, you can start a container.
