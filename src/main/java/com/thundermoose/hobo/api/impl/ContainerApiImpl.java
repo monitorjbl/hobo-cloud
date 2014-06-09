@@ -8,6 +8,8 @@ import com.thundermoose.hobo.model.Node;
 import com.thundermoose.hobo.persistence.ContainerRepository;
 import com.thundermoose.hobo.model.ModelValidator;
 import com.thundermoose.hobo.scheduler.NodeScheduler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,8 @@ import java.util.Set;
  */
 @Component
 public class ContainerApiImpl implements ContainerApi {
+  private static final Logger log = LoggerFactory.getLogger(ContainerApiImpl.class);
+
   @Value("${docker.default.expiry}")
   long defaultExpiry;
   @Value("${docker.default.memory}")
@@ -63,7 +67,7 @@ public class ContainerApiImpl implements ContainerApi {
     validator.validate(container);
 
     Node node = scheduler.leastLoadedNode();
-    if(node == null){
+    if (node == null) {
       throw new NotFoundException("No nodes were available to accept this request.");
     }
 
@@ -78,6 +82,8 @@ public class ContainerApiImpl implements ContainerApi {
     if (c == null) {
       throw new NotFoundException("Container [" + id + "] not found");
     }
+
+    log.debug("Deleting container [" + id + "]");
     repo.delete(c);
     dockerApi.stopContainer(c.getNode(), c);
   }

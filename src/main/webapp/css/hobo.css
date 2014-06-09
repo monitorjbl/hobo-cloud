@@ -1,16 +1,71 @@
+button.btn-sm {
+  width: 20px;
+  height: 14px;
+  padding: 0px;
+  font-size: 10px;
+}
+
+button.btn-md {
+  width: 32px;
+  height: 20px;
+  padding: 3px;
+  font-size: 10px;
+}
+
+.section-head {
+  text-align: center;
+}
+
+.row {
+  margin-top: 10px;
+}
+
+footer {
+  text-align: center;
+}
+
+/* alert animation */
+.alert-list {
+  position: absolute;
+  right: 20px;
+  top: 65px;
+  z-index: 100;
+}
+
+.alert-dismissable.ng-move,
+.alert-dismissable.ng-enter,
+.alert-dismissable.ng-leave {
+  -webkit-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+}
+
+.alert-dismissable.ng-leave.ng-leave-active,
+.alert-dismissable.ng-move,
+.alert-dismissable.ng-enter {
+  opacity: 0;
+}
+
+.alert-dismissable.ng-leave,
+.alert-dismissable.ng-move.ng-move-active,
+.alert-dismissable.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+
 /* Custom Styles */
 
-.item-delete{
+.item-delete {
   color: #ee4b41;
 }
 
-.container-table > tbody > tr:nth-child(even){
-  background-color:#A3CEAA;
+.container-table > tbody > tr:nth-child(even) {
+  background-color: #A3CEAA;
 }
-.container-table > tbody > tr:nth-child(odd){
+
+.container-table > tbody > tr:nth-child(odd) {
   background-color: #06ab29;
 }
-.port-table tr{
+
+.port-table tr {
   background-color: transparent;
 }
 
@@ -23,7 +78,7 @@ body {
   background-color: #f8f8f8;
 }
 
-@media(min-width:768px) {
+@media (min-width: 768px) {
   body {
     padding-top: 50px;
   }
@@ -43,7 +98,7 @@ body {
   background-color: #fff;
 }
 
-@media(min-width:768px) {
+@media (min-width: 768px) {
   #page-wrapper {
     position: inherit;
     margin: 0 0 0 250px;
@@ -149,7 +204,7 @@ body {
   padding-left: 52px;
 }
 
-@media(min-width:768px) {
+@media (min-width: 768px) {
   .navbar-static-side {
     z-index: 1;
     position: absolute;
@@ -164,14 +219,14 @@ body {
   }
 }
 
-@media(max-height:600px) and (max-width:767px) {
+@media (max-height: 600px) and (max-width: 767px) {
   .sidebar-collapse {
     max-height: 300px;
     overflow-y: scroll;
   }
 }
 
-@media(max-height:400px) and (max-width:767px) {
+@media (max-height: 400px) and (max-width: 767px) {
   .sidebar-collapse {
     max-height: 200px;
     overflow-y: scroll;
@@ -301,7 +356,7 @@ table.dataTable thead .sorting:after {
   content: "\f0dc";
   float: right;
   font-family: fontawesome;
-  color: rgba(50,50,50,.5);
+  color: rgba(50, 50, 50, .5);
 }
 
 /* Circle Buttons */

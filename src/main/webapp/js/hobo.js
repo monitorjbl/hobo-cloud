@@ -1,4 +1,4 @@
-var app = angular.module('hobo', ['ngRoute', 'ui.bootstrap']).config(function ($routeProvider) {
+var app = angular.module('hobo', ['ngRoute', 'ngAnimate', 'ui.bootstrap']).config(function ($routeProvider) {
   $routeProvider.when('/', {
     templateUrl: 'root.html'
   }).when('/node', {
@@ -12,6 +12,11 @@ var app = angular.module('hobo', ['ngRoute', 'ui.bootstrap']).config(function ($
 
 app.controller('HoboCtrl', function ($scope, $http, $location, $route, $modal, $timeout) {
   $scope.deleting = {};
+  $scope.errors = [];
+
+  $scope.removeError=function($index){
+    $scope.errors.splice($index,1);
+  }
 
   $scope.getAllNodes = function () {
     $http.get('api/node/all').success(function (data) {
@@ -30,6 +35,9 @@ app.controller('HoboCtrl', function ($scope, $http, $location, $route, $modal, $
     $http.delete('api/node/' + id).success(function (data) {
       $scope.deleting['node'+id] = undefined;
       $scope.getAllNodes();
+    }).error(function(data){
+      $scope.deleting['node'+id] = undefined;
+      $scope.errors.push(data);
     });
   };
 
@@ -38,6 +46,9 @@ app.controller('HoboCtrl', function ($scope, $http, $location, $route, $modal, $
     $http.delete('api/container/' + id).success(function (data) {
       $scope.deleting['container'+id] = undefined;
       $scope.getAllContainers();
+    }).error(function(data){
+      $scope.deleting['container'+id] = undefined;
+      $scope.errors.push(data);
     });
   };
 

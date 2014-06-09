@@ -32,6 +32,5 @@ public interface NodeApi {
 
   @RequestMapping(value = "/node/{id}", method = RequestMethod.DELETE)
   @ResponseBody
-  @Transactional
   public void deleteNode(@PathVariable("id") String id);
 }

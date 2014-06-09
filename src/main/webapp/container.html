@@ -1,8 +1,16 @@
 <div ng-controller="HoboCtrl" ng-init="getAllContainers()">
+  <div class="alert-list">
+    <div class="alert alert-danger alert-dismissable" ng-repeat="error in errors">
+      <button type="button" class="close" aria-hidden="true" ng-click="removeError($index)">×</button>
+      {{error.message}}
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-lg-12">
       <h1 class="page-header">Containers
-        <button class="btn btn-circle btn-success" ng-click="openContainerModal()"><i class="fa fa-plus"></i></button>
+        <button class="btn btn-circle btn-success btn-md" ng-click="openContainerModal()"><i class="fa fa-plus"></i>
+        </button>
       </h1>
     </div>
   </div>
@@ -11,11 +19,13 @@
     <div class="col-lg-4" ng-repeat="container in containers">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <button class="btn btn-danger" ng-disabled="deleting['container'+container.id]">
+          {{container.repository}}/{{container.tag}}
+          <span class="pull-right">
+          <button class="btn btn-danger btn-circle btn-sm" ng-disabled="deleting['container'+container.id]">
             <i class="fa fa-minus" ng-click="deleteContainer(container.id)" ng-show="!deleting['container'+container.id]"></i>
             <i class="fa fa-spinner fa-spin" ng-show="deleting['container'+container.id]"></i>
           </button>
-          {{container.repository}}/{{container.tag}}
+          </span>
         </div>
         <table class="port-table">
           <tr ng-repeat="port in container.ports">

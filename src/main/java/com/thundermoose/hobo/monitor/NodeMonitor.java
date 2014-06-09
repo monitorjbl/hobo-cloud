@@ -52,7 +52,7 @@ public class NodeMonitor implements Runnable {
   }
 
   void pollNodes() {
-    log.info("Polling all nodes");
+    log.debug("Polling all nodes");
     for (Node node : nodeRepo.getAllNodes()) {
       Set<Container> updated = new HashSet<>();
       for (Container c : dockerApi.getRunningContainers(node)) {
@@ -86,14 +86,13 @@ public class NodeMonitor implements Runnable {
     for (Container c : containerRepo.findByExternal(false)) {
       long diff = milliSinceDate(c.getCreated());
       if (diff > c.getExpiry()) {
-        log.info("Container [" + c.getDockerId() + "] on Node [" + c.getNode().getHostname() + "] is overdue for deletion by " + diff + "ms");
+        log.debug("Container [" + c.getDockerId() + "] on Node [" + c.getNode().getHostname() + "] is overdue for deletion by " + diff + "ms");
         containerApi.deleteContainer(c.getId());
       }
     }
   }
 
   long milliSinceDate(Date date) {
-    Duration d = Duration.between(Instant.ofEpochMilli(date.getTime()), Instant.now());
-    return d.toMillis();
+    return Duration.between(Instant.ofEpochMilli(date.getTime()), Instant.now()).toMillis();
   }
 }
