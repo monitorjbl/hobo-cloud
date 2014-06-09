@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="https://github.com/monitorjbl/hobo-cloud/blob/master/src/main/webapp/img/cloud-bindle.png?raw=true" />
+</p>
+
+
 # Hobo Cloud
 
 Uses Docker to build simple, temporary shelters for your wandering code to execute. Very useful if you've got some compute resources laying around and some work to do that doesn't require external access. Compiling code, running batch jobs, the kind of thing you need to run somewhere, but where doesn't actually matter.
